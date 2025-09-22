@@ -58,11 +58,7 @@
     document.addEventListener('DOMContentLoaded',()=>{
       const map=L.map('map',{worldCopyJump:true}).setView([20,10],2);
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap'}).addTo(map);
-     const espressoIcon = L.icon({
-  iconUrl: 'cup.png',
-  iconSize: [28, 28],
-  iconAnchor: [14, 14]
-});
+     const espressoIcon = L.icon({iconUrl: 'cup.png',iconSize: [28, 28],iconAnchor: [14, 14]});
       EVENTS.forEach(e=>{
         L.marker(e.coords,{icon:oIcon}).addTo(map).bindTooltip(`<b>${e.city}</b><br>${e.country}<br>${e.date}`);
       });
