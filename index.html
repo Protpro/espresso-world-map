@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Espresso World Map</title>
+  <title>o World Map</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
   <style>
@@ -30,8 +30,8 @@
 </head>
 <body>
   <div class="wrap">
-    <div class="brand"><div class="dot"></div><h1>Espresso World Map</h1></div>
-    <p class="sub">Highlighting where Espresso has been and where we’re going next.</p>
+    <div class="brand"><div class="dot"></div><h1>o World Map</h1></div>
+    <p class="sub">Highlighting where o has been and where we’re going next.</p>
     <div id="map"></div>
     <div class="section">
       <h2>Upcoming Events</h2>
@@ -58,9 +58,13 @@
     document.addEventListener('DOMContentLoaded',()=>{
       const map=L.map('map',{worldCopyJump:true}).setView([20,10],2);
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap'}).addTo(map);
-      const espressoIcon=L.icon({iconUrl:'espresso-cup.png',iconSize:[28,28],iconAnchor:[14,14]});
+     const espressoIcon = L.icon({
+  iconUrl: 'cup.png',
+  iconSize: [28, 28],
+  iconAnchor: [14, 14]
+});
       EVENTS.forEach(e=>{
-        L.marker(e.coords,{icon:espressoIcon}).addTo(map).bindTooltip(`<b>${e.city}</b><br>${e.country}<br>${e.date}`);
+        L.marker(e.coords,{icon:oIcon}).addTo(map).bindTooltip(`<b>${e.city}</b><br>${e.country}<br>${e.date}`);
       });
       renderUpcoming(); renderPast();
     });
