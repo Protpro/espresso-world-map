@@ -14,19 +14,18 @@
     h1{font-family:Merriweather,serif;font-size:28px;margin:0}
     h2{font-family:Merriweather,serif;font-size:22px;margin:18px 0 10px}
     p.sub{opacity:.9;margin:6px 0 18px}
-    #map{height:520px;width:100%;border:1px solid #D7C7B6;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.06)}
-    .placeholder{display:flex;align-items:center;justify-content:center;height:520px;border:1px dashed #D7C7B6;border-radius:16px;color:#8b6f5a;background:rgba(0,0,0,0.02)}
-    .cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    #map{height:480px;width:100%;border:1px solid #D7C7B6;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.06)}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:12px}
     .card{position:relative;border-radius:18px;overflow:hidden;border:1px solid #D7C7B6;box-shadow:0 8px 24px rgba(0,0,0,.06);background:#fff}
     .card .image{height:160px;background:#e8dccb url('') center/cover no-repeat}
-    .card .overlay{position:absolute;inset:0;padding:18px;background:linear-gradient(90deg,rgba(0,0,0,.55) 40%,rgba(0,0,0,0) 100%);color:#fff;display:flex;flex-direction:column;justify-content:flex-end}
-    .label{display:inline-block;padding:4px 8px;border-radius:999px;font-size:12px;color:#fff}
+    .card .overlay{position:absolute;inset:0;padding:16px;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.55) 100%);color:#fff}
+    .label{display:inline-block;padding:4px 8px;border-radius:999px;font-size:12px;color:#fff;margin-bottom:8px}
     .label.upcoming{background:#E0A265}
     .label.past{background:#8C6A4A}
-    .list{background:#fff;border:1px solid #D7C7B6;border-radius:16px;overflow:hidden}
+    .list{background:#fff;border:1px solid #D7C7B6;border-radius:16px;overflow:hidden;margin-top:12px}
     .row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:14px 16px;border-bottom:1px solid #D7C7B6}
     .row:last-child{border-bottom:none}
-    .leaflet-container img{max-width:none !important;}
+    .date{font-size:13px;opacity:.8}
   </style>
 </head>
 <body>
@@ -46,45 +45,30 @@
   <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     const EVENTS=[
-      { city:'Denver',country:'USA',status:'past',coords:[39.7392,-104.9903] },
-      { city:'San Francisco',country:'USA',status:'past',coords:[37.7749,-122.4194] },
-      { city:'New York',country:'USA',status:'past',coords:[40.7128,-74.0060] },
-      { city:'Cannes',country:'France',status:'past',coords:[43.5528,7.0174] },
-      { city:'Bangkok',country:'Thailand',status:'past',coords:[13.7563,100.5018] },
-      { city:'Brussels',country:'Belgium',status:'past',coords:[50.8503,4.3517] },
-      { city:'Berlin',country:'Germany',status:'past',coords:[52.52,13.4050] },
-      { city:'Seoul',country:'Korea',status:'upcoming',coords:[37.5665,126.9780],img:'https://assets.raribleuserdata.com/prod/v1/image/t_image_preview/aHR0cHM6Ly9pcGZzLnJhcmlibGV1c2VyZGF0YS5jb20vaXBmcy9RbVNjWXRHdmhRQXpYNVNjaldVZEo1QlY3eE1KSkc4Ulo5REoyMkRHNkFhanVrLzIxMzYucG5n' },
-      { city:'Buenos Aires',country:'Argentina',status:'upcoming',coords:[-34.6037,-58.3816],img:'https://assets.raribleuserdata.com/prod/v1/image/t_image_preview/aHR0cHM6Ly9pcGZzLnJhcmlibGV1c2VyZGF0YS5jb20vaXBmcy9RbVNjWXRHdmhRQXpYNVNjaldVZEo1QlY3eE1KSkc4Ulo5REoyMkRHNkFhanVrLzQ1ODkucG5n' }
+      { city:'Denver',country:'USA',status:'past',coords:[39.7392,-104.9903],date:'01/01/2020' },
+      { city:'San Francisco',country:'USA',status:'past',coords:[37.7749,-122.4194],date:'01/01/2020' },
+      { city:'New York',country:'USA',status:'past',coords:[40.7128,-74.0060],date:'01/01/2000' },
+      { city:'Cannes',country:'France',status:'past',coords:[43.5528,7.0174],date:'02/20/2000' },
+      { city:'Bangkok',country:'Thailand',status:'past',coords:[13.7563,100.5018],date:'02/20/2000' },
+      { city:'Brussels',country:'Belgium',status:'past',coords:[50.8503,4.3517],date:'02/20/2000' },
+      { city:'Berlin',country:'Germany',status:'past',coords:[52.52,13.4050],date:'02/20/2000' },
+      { city:'Seoul',country:'Korea',status:'upcoming',coords:[37.5665,126.9780],date:'12/12/2025',img:'https://assets.raribleuserdata.com/prod/v1/image/t_image_preview/aHR0cHM6Ly9pcGZzLnJhcmlibGV1c2VyZGF0YS5jb20vaXBmcy9RbVNjWXRHdmhRQXpYNVNjaldVZEo1QlY3eE1KSkc4Ulo5REoyMkRHNkFhanVrLzIxMzYucG5n' },
+      { city:'Buenos Aires',country:'Argentina',status:'upcoming',coords:[-34.6037,-58.3816],date:'12/12/2025',img:'https://assets.raribleuserdata.com/prod/v1/image/t_image_preview/aHR0cHM6Ly9pcGZzLnJhcmlibGV1c2VyZGF0YS5jb20vaXBmcy9RbVNjWXRHdmhRQXpYNVNjaldVZEo1QlY3eE1KSkc4Ulo5REoyMkRHNkFhanVrLzQ1ODkucG5n' }
     ];
     document.addEventListener('DOMContentLoaded',()=>{
-      try{
-        const map=L.map('map',{
-          center:[20,10],zoom:2,
-          worldCopyJump:false,
-          maxBounds:[[-85,-180],[85,180]],
-          maxBoundsViscosity:1.0
-        });
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
-          attribution:'&copy; OpenStreetMap',noWrap:true
-        }).addTo(map);
-        EVENTS.forEach(e=>{
-          L.circleMarker(e.coords,{radius:8,color:e.status==='past'?'#8C6A4A':'#E0A265',fillOpacity:.85})
-            .addTo(map).bindTooltip(e.city+', '+e.country);
-        });
-        requestAnimationFrame(()=>map.invalidateSize());
-        window.addEventListener('load',()=>map.invalidateSize());
-        window.addEventListener('resize',()=>map.invalidateSize());
-      }catch(err){
-        document.getElementById('map').outerHTML='<div class="placeholder">Map preview unavailable. Lists still work.</div>';
-      }
+      const map=L.map('map',{worldCopyJump:true}).setView([20,10],2);
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap'}).addTo(map);
+      const espressoIcon=L.icon({iconUrl:'espresso-cup.png',iconSize:[28,28],iconAnchor:[14,14]});
+      EVENTS.forEach(e=>{
+        L.marker(e.coords,{icon:espressoIcon}).addTo(map).bindTooltip(`<b>${e.city}</b><br>${e.country}<br>${e.date}`);
+      });
       renderUpcoming(); renderPast();
     });
     function renderUpcoming(){
       const root=document.getElementById('upcomingCards');
       root.innerHTML='';
       EVENTS.filter(e=>e.status==='upcoming').forEach(e=>{
-        const el=document.createElement('div');
-        el.className='card';
+        const el=document.createElement('div');el.className='card';
         const bg=e.img?`style="background-image:url('${e.img}');background-size:cover;background-position:center;"`:'';
         el.innerHTML=`
           <div class="image" ${bg}></div>
@@ -92,6 +76,7 @@
             <div class="label upcoming">Upcoming</div>
             <h3>${e.city}</h3>
             <div>${e.country}</div>
+            <div class="date">${e.date}</div>
           </div>`;
         root.appendChild(el);
       });
@@ -100,7 +85,13 @@
       const root=document.getElementById('pastList');
       EVENTS.filter(e=>e.status==='past').forEach(e=>{
         const row=document.createElement('div');row.className='row';
-        row.innerHTML='<div><div>'+e.city+'</div><div style="opacity:.75;font-size:13px">'+e.country+'</div></div><div><span class="label past">Past</span></div>';
+        row.innerHTML=`
+          <div>
+            <div>${e.city}</div>
+            <div style="opacity:.75;font-size:13px">${e.country}</div>
+            <div class="date">${e.date}</div>
+          </div>
+          <div><span class="label past">Past</span></div>`;
         root.appendChild(row);
       });
     }
