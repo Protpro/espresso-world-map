@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Espresso World Map – Stable Preview</title>
+  <title>Espresso World Map – Preview</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
   <style>
@@ -15,10 +15,10 @@
     h2{font-family:Merriweather,serif;font-size:22px;margin:18px 0 10px}
     p.sub{opacity:.9;margin:6px 0 18px}
     #map{height:520px;width:100%;border:1px solid #D7C7B6;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.06)}
-    .placeholder{display:flex;align-items:center;justify-content:center;height:520px;border:1px dashed #D7C7B6;border-radius:16px;color:#8b6f5a;background:rgba(0,0,0,0.02)}
     .cards{display:grid;grid-template-columns:1fr;gap:16px}
+    @media(min-width:860px){.cards{grid-template-columns:1fr 1fr}}
     .card{position:relative;border-radius:18px;overflow:hidden;border:1px solid #D7C7B6;box-shadow:0 8px 24px rgba(0,0,0,.06);background:#fff}
-    .card .image{height:200px;background:#e8dccb url('') center/cover no-repeat}
+    .card .image{height:200px;background:#e8dccb center/cover no-repeat}
     .card .overlay{position:absolute;inset:auto 0 0 0;padding:18px;background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.35) 60%,rgba(0,0,0,.55) 100%);color:#fff}
     .label{display:inline-block;padding:4px 8px;border-radius:999px;font-size:12px;color:#fff}
     .label.upcoming{background:#E0A265}
@@ -52,8 +52,20 @@
       { city:'Bangkok',country:'Thailand',status:'past',coords:[13.7563,100.5018] },
       { city:'Brussels',country:'Belgium',status:'past',coords:[50.8503,4.3517] },
       { city:'Berlin',country:'Germany',status:'past',coords:[52.52,13.4050] },
-      { city:'Seoul',country:'Korea',status:'upcoming',coords:[37.5665,126.9780],img:'' },
-      { city:'Buenos Aires',country:'Argentina',status:'upcoming',coords:[-34.6037,-58.3816],img:'' }
+      { 
+        city:'Seoul',
+        country:'Korea',
+        status:'upcoming',
+        coords:[37.5665,126.9780],
+        img:'https://assets.raribleuserdata.com/prod/v1/image/t_image_preview/aHR0cHM6Ly9pcGZzLnJhcmlibGV1c2VyZGF0YS5jb20vaXBmcy9RbVNjWXRHdmhRQXpYNVNjaldVZEo1QlY3eE1KSkc4Ulo5REoyMkRHNkFhanVrLzIxMzYucG5n'
+      },
+      { 
+        city:'Buenos Aires',
+        country:'Argentina',
+        status:'upcoming',
+        coords:[-34.6037,-58.3816],
+        img:'https://assets.raribleuserdata.com/prod/v1/image/t_image_preview/aHR0cHM6Ly9pcGZzLnJhcmlibGV1c2VyZGF0YS5jb20vaXBmcy9RbVNjWXRHdmhRQXpYNVNjaldVZEo1QlY3eE1KSkc4Ulo5REoyMkRHNkFhanVrLzQ1ODkucG5n'
+      }
     ];
     document.addEventListener('DOMContentLoaded',()=>{
       try{
@@ -68,17 +80,28 @@
       renderUpcoming(); renderPast();
     });
     function renderUpcoming(){
-      const root=document.getElementById('upcomingCards');
-      EVENTS.filter(e=>e.status==='upcoming').forEach(e=>{
-        const el=document.createElement('div');el.className='card';
-        el.innerHTML='<div class="image"></div><div class="overlay"><div class="label upcoming">Upcoming</div><h3>'+e.city+'</h3><div>'+e.country+'</div></div>';
+      const root = document.getElementById('upcomingCards');
+      root.innerHTML = '';
+      EVENTS.filter(e => e.status === 'upcoming').forEach(e => {
+        const el = document.createElement('div');
+        el.className = 'card';
+        const bg = e.img ? `style="background-image:url('${e.img}');background-size:cover;background-position:center;"` : '';
+        el.innerHTML = `
+          <div class="image" ${bg}></div>
+          <div class="overlay">
+            <div class="label upcoming">Upcoming</div>
+            <h3>${e.city}</h3>
+            <div>${e.country}</div>
+          </div>`;
         root.appendChild(el);
       });
     }
     function renderPast(){
       const root=document.getElementById('pastList');
+      root.innerHTML='';
       EVENTS.filter(e=>e.status==='past').forEach(e=>{
-        const row=document.createElement('div');row.className='row';
+        const row=document.createElement('div');
+        row.className='row';
         row.innerHTML='<div><div>'+e.city+'</div><div style="opacity:.75;font-size:13px">'+e.country+'</div></div><div><span class="label past">Past</span></div>';
         root.appendChild(row);
       });
